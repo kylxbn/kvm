@@ -20,15 +20,15 @@ Well, currently, this is extremely incomplete, too incomplete to
 the point that I do not know what will happen yet. However, these are
 things that I plan to do soon:
 
-[ ] Virtualizing a hard drive
-[ ] Implementing the BIOS
-[ ] Writing a bootloader
-[ ] Deciding on the CPU opcode list
-[ ] Writing the CPU emulator
-[ ] Writing a graphics device that can draw pixels and lines at least
-[ ] Writing a basic proof of concept program (simple looping animation?)
-[ ] Writing basic keyboard device
-[ ] Writing an operating system (the hardest task, I guess)
+* Virtualizing a hard drive
+* Implementing the BIOS
+* Writing a bootloader
+* Deciding on the CPU opcode list
+* Writing the CPU emulator
+* Writing a graphics device that can draw pixels and lines at least
+* Writing a basic proof of concept program (simple looping animation?)
+* Writing basic keyboard device
+* Writing an operating system (the hardest task, I guess)
 
 ## License
 
