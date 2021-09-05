@@ -1,0 +1,82 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+_global_script_classes=[ {
+"base": "Object",
+"class": "CPU",
+"language": "GDScript",
+"path": "res://src/hw/cpu/CPU.gd"
+}, {
+"base": "MemoryMappedDevice",
+"class": "GPU",
+"language": "GDScript",
+"path": "res://src/hw/gpu/GPU.gd"
+}, {
+"base": "RAM",
+"class": "GenericRAM",
+"language": "GDScript",
+"path": "res://src/hw/ram/generic/GenericRAM.gd"
+}, {
+"base": "CPU",
+"class": "K1",
+"language": "GDScript",
+"path": "res://src/hw/cpu/k1/K1.gd"
+}, {
+"base": "Object",
+"class": "MemoryMappedDevice",
+"language": "GDScript",
+"path": "res://src/hw/MemoryMappedDevice.gd"
+}, {
+"base": "Object",
+"class": "RAM",
+"language": "GDScript",
+"path": "res://src/hw/ram/RAM.gd"
+}, {
+"base": "MemoryMappedDevice",
+"class": "RandGen",
+"language": "GDScript",
+"path": "res://src/hw/RandGen.gd"
+}, {
+"base": "GPU",
+"class": "X1",
+"language": "GDScript",
+"path": "res://src/hw/gpu/x1/X1.gd"
+} ]
+_global_script_class_icons={
+"CPU": "",
+"GPU": "",
+"GenericRAM": "",
+"K1": "",
+"MemoryMappedDevice": "",
+"RAM": "",
+"RandGen": "",
+"X1": ""
+}
+
+[application]
+
+config/name="kvm"
+config/icon="res://icon.png"
+
+[display]
+
+window/size/height=1024
+window/dpi/allow_hidpi=true
+window/stretch/mode="viewport"
+window/stretch/aspect="keep"
+window/stretch/shrink=4.0
+
+[physics]
+
+common/enable_pause_aware_picking=true
+
+[rendering]
+
+environment/default_environment="res://default_env.tres"

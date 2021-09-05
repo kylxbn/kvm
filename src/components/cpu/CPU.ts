@@ -1,3 +1,0 @@
-interface CPU {
-    run();
-}
