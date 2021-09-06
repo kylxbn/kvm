@@ -19,12 +19,12 @@ func _ready():
 	_mmc.add_device(_gpu, 0xF0, 0xFF)
 
 	_cpu = K1.new(_mmc)
-
+	
 func _process(_delta):
 	var image_texture = ImageTexture.new()
 	image_texture.create_from_image(_gpu.get_image())
-	$Sprite.texture = image_texture
-
+	self.texture = image_texture
+	
 func _physics_process(_delta):
 	_cpu.step()
 
