@@ -1,7 +1,7 @@
 extends GPU
 class_name X1
 
-var _buffer: PoolByteArray
+var _buffer: Image
 
 const _WIDTH = 640
 const _HEIGHT = 480
@@ -9,20 +9,14 @@ const _HEIGHT = 480
 var _ram: PoolByteArray
 
 func _init():
-	_buffer = PoolByteArray()
-	_buffer.resize(_WIDTH * _HEIGHT * 4)
-	for i in 640 * 480:
-		_buffer.set(i * 4 + 3, 255)
+	_buffer = Image.new()
+	_buffer.create(640, 480, false, Image.FORMAT_RGB8)
 		
 	_ram = PoolByteArray()
 	_ram.resize(16)
 		
 func _set_pixel(x: int, y: int, color: Color):
-	var index = 4 * (y * _WIDTH + x)
-	_buffer.set(index, color.r8)
-	_buffer.set(index + 1, color.g8)
-	_buffer.set(index + 2, color.b8)
-	_buffer.set(index + 3, color.a8)
+	_buffer.set_pixel(x, y, color)
 
 func _draw_line():
 	var x1 = _ram[0]
@@ -48,18 +42,18 @@ func _draw_line():
 	var i: int = 1
 
 	while i <= step:
-		_set_pixel(int(x), int(y), color)
+		_buffer.set_pixel(int(x), int(y), color)
 		x += dx
 		y += dy
 		i += 1
 
 func get_image():
-	var image = Image.new()
-	image.create_from_data(640, 480, false, Image.FORMAT_RGBA8, _buffer)
-	return image
+	return _buffer
 
 func set_at(index: int, val: int):
 	if index == 0xF:
+		_buffer.lock()
 		_draw_line()
+		_buffer.unlock()
 	else:
 		_ram.set(index, val)
