@@ -23,23 +23,23 @@ const OP_SUB_X   = 0xB3
 const OP_Z_JUMP = 0x91
 const OP_JUMP   = 0x90
 
-func _init(ram: RAM).(ram):
+func _init(mmc: MemoryMapper).(mmc):
 	pass
 
-func step():	
-	var opcode = _ram.get_at(_pc)
-	var param = _ram.get_at(_pc + 1)
+func step():
+	var opcode = _mmc.get_at(_pc)
+	var param = _mmc.get_at(_pc + 1)
 	_pc += 2
 
 	if opcode == OP_LOAD_A_ABS:
-		_a = _ram.get_at(param)
+		_a = _mmc.get_at(param)
 		_zf = _a == 0
 	elif opcode == OP_STORE_A_ABS:
-		_ram.set_at(param, _a)
+		_mmc.set_at(param, _a)
 	elif opcode == OP_LOAD_X_ABS:
-		_x = _ram.get_at(param)
+		_x = _mmc.get_at(param)
 	elif opcode == OP_STORE_X_ABS:
-		_ram.set_at(param, _x)
+		_mmc.set_at(param, _x)
 	elif opcode == OP_LOAD_A_IMM:
 		_a = param
 		_zf = _a == 0
@@ -67,5 +67,3 @@ func step():
 			_pc = param
 	elif opcode == OP_JUMP:
 		_pc = param
-
-	# print('A=' + str(_a) + ' X=' + str(_x) + ' PC=' + str(_pc))

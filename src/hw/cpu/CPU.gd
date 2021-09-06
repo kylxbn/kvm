@@ -1,7 +1,7 @@
 extends Object
 class_name CPU
 
-var _ram: RAM
+var _mmc: MemoryMapper
 
-func _init(ram: RAM):
-	_ram = ram
+func _init(mmc: MemoryMapper):
+	_mmc = mmc

@@ -3,6 +3,7 @@ extends Node2D
 var _cpu: K1
 var _gpu: X1
 var _ram: GenericRAM
+var _mmc: MemoryMapper
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -10,12 +11,14 @@ func _ready():
 	
 	_gpu = X1.new()
 	_ram = GenericRAM.new()
-	_ram.add_device(RandGen.new(), 0xE9, 0xE9)
-	_ram.add_device(_gpu, 0xF0, 0xFF)
-
 	load_program()
+	_mmc = MemoryMapper.new()
+	
+	_mmc.add_device(_ram, 0x00, 0xE0)
+	_mmc.add_device(RandGen.new(), 0xE9, 0xE9)
+	_mmc.add_device(_gpu, 0xF0, 0xFF)
 
-	_cpu = K1.new(_ram)
+	_cpu = K1.new(_mmc)
 
 func _process(_delta):
 	var image_texture = ImageTexture.new()
