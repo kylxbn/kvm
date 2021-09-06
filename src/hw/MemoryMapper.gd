@@ -5,10 +5,8 @@ var _devices: Array
 
 func _in_devices(index):
 	var size = _devices.size()
-	if size == 0:
-		return -1
 
-	if _devices[0][0] > index || _devices[size-1][1] < index:
+	if size == 0 || (_devices[0][0] > index || _devices[size-1][1] < index):
 		return -1
 
 	for device_index in range(_devices.size()):
