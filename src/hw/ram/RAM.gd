@@ -4,8 +4,6 @@ class_name RAM
 var _size: int
 var _data: PoolByteArray
 
-
-
 func _init(size: int):
 	_size = size
 	

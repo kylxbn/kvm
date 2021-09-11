@@ -28,8 +28,8 @@ func _init(mmc: MemoryMapper).(mmc):
 
 func step():
 	var opcode = _mmc.get_at(_pc)
-	var param = _mmc.get_at(_pc + 1)
-	_pc += 2
+	var param = _mmc.get_at(_pc + 1) + (_mmc.get_at(_pc + 2) << 8)
+	_pc += 3
 
 	if opcode == OP_LOAD_A_ABS:
 		_a = _mmc.get_at(param)
@@ -54,12 +54,12 @@ func step():
 		var res = _a + param
 		_a = res if res < 256 else res - 256
 	elif opcode == OP_SUB_X:
-		_pc -= 1
+		_pc -= 2
 		var res = _a - _x
 		_a = res if res >= 0 else res + 256
 		_zf = _a == 0
 	elif opcode == OP_ADD_X:
-		_pc -= 1
+		_pc -= 2
 		var res = _a + _x
 		_a = res if res < 256 else res - 256
 	elif opcode == OP_Z_JUMP:
