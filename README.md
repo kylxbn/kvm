@@ -1,5 +1,19 @@
 # K Virtual Machine
 
+## Screenshots
+
+#### KVM loading a Binary file to RAM
+
+![](doc/kvm.png)
+
+#### The bootloader displaying lines on screen
+
+![](doc/bootloader.png)
+
+#### AK1 assembler compiling the bootloader
+
+![](doc/asm.png)
+
 ## What is this?
 
 This is my attempt at creating my own virtual machine with custom
@@ -13,16 +27,19 @@ that "it might work". The RAM, video card, and CPU are currently
 being "virtualized", in that:
 
 1. The graphics card (named X1) is initialized (which contains a 256x256 framebuffer and 16 bytes of RAM)
-2. The RAM is created (which contains 4,096 bytes worth of memory mapped from `0x0000-0x0FFF`. However, currently, the CPU can only address the range `0x00` to `0xFF`.)
-3. A device that provides random numbers is connected to address `0xE9`.
-4. The graphics card is connected to RAM with its address space mapped to `0xF0-0xFF`.
-5. A program is then loaded to RAM space `0x00-`. It's coded entirely in machine code and does nothing more than draw multicolored lines into the screen:
+2. The RAM is created (which contains 4,096 bytes worth of memory)
+3. A device that provides random numbers (RandGen) is initialized
+4. A memory mapper is created and the following are mapped to address space:
+    1. RAM is mapped at `0x0000-0x0FFF`
+    2. The GPU is mapped at `0xF0F0-0xF0FF`.
+    3. The RandGen device is mapped at `0xF0E9`
+5. A program is then loaded to RAM space `0x0000-`. The currently available compiled binary was compiled from assembly and does nothing more than draw multicolored lines into the screen:
     1. The CPU gets random numbers as line coordinates from the random generator device
     2. Similar X1/X2 or Y1/Y2 values are avoided by detecting those and getting new random values as necessary
-    4. The coordinates are saved into `0x00-0x03`.
-    3. The CPU gets random numbers to choose a random color and saved at `0x04-0x06`.
-    4. The CPU transfers the data into the GPU's address space `0xF0-0xFF`.
-    5. The CPU triggers a GPU line draw by writing something into `0xFF`.
+    4. The coordinates are saved into `0x00D0-0x00D3`.
+    3. The CPU gets random numbers to choose a random color and saved at `0x00D4-0x00D6`.
+    4. The CPU transfers the data into the GPU's address space `0xF0F0-0xF0FF`.
+    5. The CPU triggers a GPU line draw by writing something into `0xF0FF`.
 
 ### CPU (K1)
 
