@@ -5,9 +5,13 @@ var _gpu: X1
 var _ram: GenericRAM
 var _mmc: MemoryMapper
 
+var _display: Sprite
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	randomize()
+	
+	_display = $Display
 	
 	_gpu = X1.new()
 	_ram = GenericRAM.new()
@@ -20,13 +24,22 @@ func _ready():
 
 	_cpu = K1.new(_mmc)
 	
+	$CPUClock.start()
+	
 func _process(_delta):
 	var image_texture = ImageTexture.new()
 	image_texture.create_from_image(_gpu.get_image())
-	self.texture = image_texture
+	_display.texture = image_texture
 	
-func _physics_process(_delta):
-	_cpu.step()
+func _on_CPUClock_timeout():
+	# var s = OS.get_ticks_usec()
+	
+	var count = 0
+	while count < 30:
+		_cpu.step()
+		count += 1
+
+	# print((OS.get_ticks_usec() - s) - 16666) 
 
 func load_program():
 	var code = [
@@ -70,4 +83,3 @@ func load_program():
 	]
 	for index in range(code.size()):
 		_ram.set_at(index, code[index])
-		
