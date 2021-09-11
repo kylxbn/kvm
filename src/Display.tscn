@@ -5,15 +5,75 @@
 [sub_resource type="ImageTexture" id=1]
 size = Vector2( 256, 256 )
 
-[node name="Node2D" type="Node2D"]
+[node name="Panel" type="Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="CPUClock" type="Timer" parent="."]
 process_mode = 0
 wait_time = 0.016
 
-[node name="Display" type="Sprite" parent="."]
+[node name="Window" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MenuContainer" type="HBoxContainer" parent="Window"]
+margin_right = 1024.0
+margin_bottom = 20.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FileMenu" type="MenuButton" parent="Window/MenuContainer"]
+margin_right = 35.0
+margin_bottom = 20.0
+text = "File"
+items = [ "Choose disk image...", null, 0, false, false, 0, 0, null, "", false, "", null, 0, false, true, 1, 0, null, "", true, "Exit", null, 0, false, false, 2, 0, null, "", false ]
+
+[node name="SystemMenu" type="MenuButton" parent="Window/MenuContainer"]
+margin_left = 39.0
+margin_right = 98.0
+margin_bottom = 20.0
+text = "System"
+items = [ "Start", null, 0, false, false, 0, 0, null, "", false, "Pause", null, 0, false, false, 1, 0, null, "", false ]
+
+[node name="AboutMenu" type="MenuButton" parent="Window/MenuContainer"]
+margin_left = 102.0
+margin_right = 152.0
+margin_bottom = 20.0
+text = "About"
+
+[node name="Panel" type="CenterContainer" parent="Window"]
+margin_top = 24.0
+margin_right = 1024.0
+margin_bottom = 582.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Screen" type="TextureRect" parent="Window/Panel"]
+margin_left = 384.0
+margin_top = 151.0
+margin_right = 640.0
+margin_bottom = 407.0
 texture = SubResource( 1 )
-centered = false
+
+[node name="StatusContainer" type="HBoxContainer" parent="Window"]
+margin_top = 586.0
+margin_right = 1024.0
+margin_bottom = 600.0
+
+[node name="Label" type="Label" parent="Window/StatusContainer"]
+margin_right = 39.0
+margin_bottom = 14.0
+text = "Status"
 
 [connection signal="timeout" from="CPUClock" to="." method="_on_CPUClock_timeout"]

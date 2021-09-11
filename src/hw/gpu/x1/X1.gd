@@ -3,17 +3,19 @@ class_name X1
 
 var _buffer: Image
 
-const _WIDTH = 640
-const _HEIGHT = 480
+const _WIDTH = 256
+const _HEIGHT = 256
 
 var _ram: PoolByteArray
 
 func _init():
 	_buffer = Image.new()
-	_buffer.create(640, 480, false, Image.FORMAT_RGB8)
+	_buffer.create(_WIDTH, _HEIGHT, false, Image.FORMAT_RGB8)
 		
 	_ram = PoolByteArray()
 	_ram.resize(16)
+	
+	changed = false
 		
 func _set_pixel(x: int, y: int, color: Color):
 	_buffer.set_pixel(x, y, color)
@@ -46,8 +48,11 @@ func _draw_line():
 		x += dx
 		y += dy
 		i += 1
+	
+	changed = true
 
 func get_image():
+	changed = false
 	return _buffer
 
 func set_at(index: int, val: int):

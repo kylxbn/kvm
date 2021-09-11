@@ -1,17 +1,17 @@
-extends Node2D
+extends Panel
 
 var _cpu: K1
 var _gpu: X1
 var _ram: GenericRAM
 var _mmc: MemoryMapper
 
-var _display: Sprite
+var _display: TextureRect
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	randomize()
 	
-	_display = $Display
+	_display = $Window/Panel/Screen
 	
 	_gpu = X1.new()
 	_ram = GenericRAM.new()
@@ -24,12 +24,30 @@ func _ready():
 
 	_cpu = K1.new(_mmc)
 	
-	$CPUClock.start()
+	$Window/MenuContainer/FileMenu.get_popup().connect("id_pressed", self, "_handle_file_menu")
+	$Window/MenuContainer/SystemMenu.get_popup().connect("id_pressed", self, "_handle_system_menu")
+
+
+func _handle_file_menu(id):
+	match id:
+		0:
+			print("open")
+		2:
+			print('lol')
+			get_tree().quit()
+
+func _handle_system_menu(id):
+	match id:
+		0:
+			$CPUClock.start()
+		1:
+			$CPUClock.stop()
 	
 func _process(_delta):
-	var image_texture = ImageTexture.new()
-	image_texture.create_from_image(_gpu.get_image())
-	_display.texture = image_texture
+	if _gpu.changed:
+		var image_texture = ImageTexture.new()
+		image_texture.create_from_image(_gpu.get_image())
+		_display.texture = image_texture
 	
 func _on_CPUClock_timeout():
 	# var s = OS.get_ticks_usec()
