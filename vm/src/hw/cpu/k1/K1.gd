@@ -24,7 +24,11 @@ const OP_Z_JUMP = 0x91
 const OP_JUMP   = 0x90
 
 func _init(mmc: MemoryMapper).(mmc):
-	pass
+	_pc = 0
+	_x = 0
+	_y = 0
+	_a = 0
+	_zf = false
 
 func step():
 	var opcode = _mmc.get_at(_pc)
@@ -67,3 +71,10 @@ func step():
 			_pc = param
 	elif opcode == OP_JUMP:
 		_pc = param
+
+func reset():
+	_pc = 0
+	_x = 0
+	_y = 0
+	_a = 0
+	_zf = false

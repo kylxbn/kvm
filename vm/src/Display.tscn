@@ -42,7 +42,7 @@ margin_left = 39.0
 margin_right = 98.0
 margin_bottom = 20.0
 text = "System"
-items = [ "Start", null, 0, false, false, 0, 0, null, "", false, "Pause", null, 0, false, false, 1, 0, null, "", false ]
+items = [ "Start", null, 0, false, false, 0, 0, null, "", false, "Pause CPU", null, 0, false, false, 1, 0, null, "", false, "", null, 0, false, true, 2, 0, null, "", true, "Halt and reset system", null, 0, false, false, 3, 0, null, "", false ]
 
 [node name="AboutMenu" type="MenuButton" parent="Window/MenuContainer"]
 margin_left = 102.0
@@ -71,9 +71,21 @@ margin_top = 586.0
 margin_right = 1024.0
 margin_bottom = 600.0
 
-[node name="Label" type="Label" parent="Window/StatusContainer"]
+[node name="Status" type="Label" parent="Window/StatusContainer"]
 margin_right = 39.0
 margin_bottom = 14.0
 text = "Status"
 
+[node name="FileDialog" type="FileDialog" parent="."]
+margin_right = 416.0
+margin_bottom = 184.0
+rect_min_size = Vector2( 400, 140 )
+window_title = "Choose ROM"
+mode = 0
+access = 2
+filters = PoolStringArray( "*.bin" )
+current_dir = "/Users/kylxbn/Documents/Software/kvm/vm"
+current_path = "/Users/kylxbn/Documents/Software/kvm/vm/"
+
 [connection signal="timeout" from="CPUClock" to="." method="_on_CPUClock_timeout"]
+[connection signal="file_selected" from="FileDialog" to="." method="_on_FileDialog_file_selected"]

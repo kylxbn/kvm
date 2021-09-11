@@ -15,3 +15,7 @@ func get_at(index: int):
 
 func set_at(index: int, data: int):
 	_data.set(index, data)
+
+func reset():
+	_data = PoolByteArray()
+	_data.resize(_size)

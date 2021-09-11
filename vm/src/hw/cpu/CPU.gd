@@ -5,3 +5,6 @@ var _mmc: MemoryMapper
 
 func _init(mmc: MemoryMapper):
 	_mmc = mmc
+
+func reset():
+	pass

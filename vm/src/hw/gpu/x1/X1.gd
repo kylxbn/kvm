@@ -62,3 +62,12 @@ func set_at(index: int, val: int):
 		_buffer.unlock()
 	else:
 		_ram.set(index, val)
+
+func reset():
+	_buffer = Image.new()
+	_buffer.create(_WIDTH, _HEIGHT, false, Image.FORMAT_RGB8)
+		
+	_ram = PoolByteArray()
+	_ram.resize(16)
+	
+	changed = true

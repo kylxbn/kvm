@@ -14,3 +14,6 @@ func get_image():
 
 func set_at(index: int, val: int):
 	pass
+
+func reset():
+	pass
