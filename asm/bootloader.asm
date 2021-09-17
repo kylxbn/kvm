@@ -51,4 +51,4 @@ END:
     ST A $F0F2
     ST A $F0FF
 
-    JP $0300      ; then we jump to the loaded sector
+    JP #$0300      ; then we jump to the loaded sector

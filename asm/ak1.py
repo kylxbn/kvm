@@ -128,7 +128,7 @@ class Assembler:
                 if p[1] in labels:
                     binary.append(0x90)
                     binary.extend(self._toHex(labels[p[1]], True))
-                elif re.match('(\$[0-9a-f]+)|([0-9])', p[1]):
+                elif p[1][0] == '#':
                     binary.append(0x90)
                     binary.extend(self._decodeParam(p[1], True))
                 else:
@@ -137,7 +137,7 @@ class Assembler:
                 if p[1] in labels:
                     binary.append(0x91)
                     binary.extend(self._toHex(labels[p[1]], True))
-                elif re.match('(\$[0-9a-f]+)|([0-9])', p[1]):
+                elif p[1][0] == '#':
                     binary.append(0x91)
                     binary.extend(self._decodeParam(p[1], True))
                 else:
