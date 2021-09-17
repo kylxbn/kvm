@@ -29,14 +29,15 @@ being "virtualized", in that:
 1. The graphics card (named X1) is initialized (which contains a 256x256 framebuffer and 16 bytes of RAM)
 2. The RAM is created (which contains 4,096 bytes worth of memory)
 3. A device that provides random numbers (RandGen) is initialized
-4. A memory mapper is created and the following are mapped to address space:
+4. A generic HDD device that can read and write files is initialized
+5. A memory mapper is created and the following are mapped to address space:
     1. RAM is mapped at `0x0000-0x0FFF`
     2. The GPU is mapped at `0xF0F0-0xF0FF`.
     3. The RandGen device is mapped at `0xF0E9`
     4. The HDD is mapped at `0xF100-0xF302`.
-5. The bootloader is loaded automatically to RAM space `0x0000-0x00FF`.
+6. The bootloader is loaded automatically to RAM space `0x0000-0x00FF`.
     1. The default bootloader included in the repository (compiled from assembly) just access HDD sector 0, load that to `0x0300-0x03FF` while showing a loading progress bar, and then jumps execution to `0x0300`.
-6. The default disk image in this repository was compiled from assembly and does nothing more than draw multicolored lines into the screen:
+7. The default disk image in this repository was compiled from assembly and does nothing more than draw multicolored lines into the screen:
     1. The CPU transfers random coordinates into the GPU's address space `0xF0F0-0xF0F3`.
     3. The CPU gets random numbers to choose a random color and saves it at GPU address `0xF0F4-0xF0F6`.
     5. The CPU triggers a GPU line draw by writing something into `0xF0FF`.
