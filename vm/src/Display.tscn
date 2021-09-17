@@ -35,7 +35,7 @@ __meta__ = {
 margin_right = 35.0
 margin_bottom = 20.0
 text = "File"
-items = [ "Choose disk image...", null, 0, false, false, 0, 0, null, "", false, "", null, 0, false, true, 1, 0, null, "", true, "Exit", null, 0, false, false, 2, 0, null, "", false ]
+items = [ "Choose disk image...", null, 0, false, false, 0, 0, null, "", false, "Choose bootloader ROM...", null, 0, false, false, 1, 0, null, "", false, "", null, 0, false, true, 2, 0, null, "", true, "Exit", null, 0, false, false, 3, 0, null, "", false ]
 
 [node name="SystemMenu" type="MenuButton" parent="Window/MenuContainer"]
 margin_left = 39.0
@@ -76,11 +76,22 @@ margin_right = 39.0
 margin_bottom = 14.0
 text = "Status"
 
-[node name="FileDialog" type="FileDialog" parent="."]
+[node name="DiskFileDialog" type="FileDialog" parent="."]
 margin_right = 416.0
 margin_bottom = 184.0
 rect_min_size = Vector2( 400, 140 )
-window_title = "Choose ROM"
+window_title = "Open a File"
+mode = 0
+access = 2
+filters = PoolStringArray( "*.bin" )
+current_dir = "/Users/kylxbn/Documents/Software/kvm/vm"
+current_path = "/Users/kylxbn/Documents/Software/kvm/vm/"
+
+[node name="BootFileDialog" type="FileDialog" parent="."]
+margin_right = 416.0
+margin_bottom = 184.0
+rect_min_size = Vector2( 400, 140 )
+window_title = "Open a File"
 mode = 0
 access = 2
 filters = PoolStringArray( "*.bin" )
@@ -88,4 +99,5 @@ current_dir = "/Users/kylxbn/Documents/Software/kvm/vm"
 current_path = "/Users/kylxbn/Documents/Software/kvm/vm/"
 
 [connection signal="timeout" from="CPUClock" to="." method="_on_CPUClock_timeout"]
-[connection signal="file_selected" from="FileDialog" to="." method="_on_FileDialog_file_selected"]
+[connection signal="file_selected" from="DiskFileDialog" to="." method="_on_DiskFileDialog_file_selected"]
+[connection signal="file_selected" from="BootFileDialog" to="." method="_on_BootFileDialog_file_selected"]

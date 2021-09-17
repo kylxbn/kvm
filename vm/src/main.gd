@@ -4,6 +4,7 @@ var _cpu: K1
 var _gpu: X1
 var _ram: GenericRAM
 var _mmc: MemoryMapper
+var _hdd: GenericHDD
 
 var _display: TextureRect
 
@@ -15,11 +16,13 @@ func _ready():
 	
 	_gpu = X1.new()
 	_ram = GenericRAM.new(0x1000)
-	_mmc = MemoryMapper.new()
+	_mmc = MemoryMapper.new()	
+	_hdd = GenericHDD.new()
 	
 	_mmc.add_device(_ram, 0x0000, 0x0FFF)
 	_mmc.add_device(RandGen.new(), 0xF0E9, 0xF0E9)
 	_mmc.add_device(_gpu, 0xF0F0, 0xF0FF)
+	_mmc.add_device(_hdd, 0xF100, 0xF302)
 
 	_cpu = K1.new(_mmc)
 	
@@ -31,8 +34,10 @@ func _ready():
 func _handle_file_menu(id):
 	match id:
 		0:
-			$FileDialog.popup()
-		2:
+			$DiskFileDialog.popup()
+		1:
+			$BootFileDialog.popup()
+		3:
 			get_tree().quit()
 
 func _handle_system_menu(id):
@@ -66,11 +71,19 @@ func _on_CPUClock_timeout():
 
 	# print((OS.get_ticks_usec() - s) - 16666) 
 
+func _on_DiskFileDialog_file_selected(path):
+	var file = File.new()
+	file.open(path, File.READ_WRITE)
+	_hdd.set_file(file)	
+	$Window/StatusContainer/Status.text = 'Attached file ' + path + ' to HDD controller'
 
-func _on_FileDialog_file_selected(path):
+
+func _on_BootFileDialog_file_selected(path):
 	var file = File.new()
 	file.open(path, File.READ)
 	var bytes = file.get_len()
-	for index in range(bytes):
+	bytes = bytes if bytes < 256 else 256
+	for index in bytes:
 		_ram.set_at(index, file.get_8())
-	$Window/StatusContainer/Status.text = 'Loaded file ' + path + ' to RAM'
+	file.close()
+	$Window/StatusContainer/Status.text = 'Loaded file ' + path + ' to bootloader space'
