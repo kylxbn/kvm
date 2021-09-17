@@ -36,6 +36,9 @@ func _draw_line():
 	else:
 		step = abs(dy)
 		
+	if step == 0:
+		return
+		
 	dx /= step
 	dy /= step
 	
