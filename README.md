@@ -33,21 +33,21 @@ being "virtualized", in that:
     1. RAM is mapped at `0x0000-0x0FFF`
     2. The GPU is mapped at `0xF0F0-0xF0FF`.
     3. The RandGen device is mapped at `0xF0E9`
-5. A program is then loaded to RAM space `0x0000-`. The currently available compiled binary was compiled from assembly and does nothing more than draw multicolored lines into the screen:
-    1. The CPU gets random numbers as line coordinates from the random generator device
-    2. Similar X1/X2 or Y1/Y2 values are avoided by detecting those and getting new random values as necessary
-    4. The coordinates are saved into `0x00D0-0x00D3`.
-    3. The CPU gets random numbers to choose a random color and saved at `0x00D4-0x00D6`.
-    4. The CPU transfers the data into the GPU's address space `0xF0F0-0xF0FF`.
+    4. The HDD is mapped at `0xF100-0xF302`.
+5. The bootloader is loaded automatically to RAM space `0x0000-0x00FF`.
+    1. The default bootloader included in the repository (compiled from assembly) just access HDD sector 0, load that to `0x0300-0x03FF` while showing a loading progress bar, and then jumps execution to `0x0300`.
+6. The default disk image in this repository was compiled from assembly and does nothing more than draw multicolored lines into the screen:
+    1. The CPU transfers random coordinates into the GPU's address space `0xF0F0-0xF0F3`.
+    3. The CPU gets random numbers to choose a random color and saves it at GPU address `0xF0F4-0xF0F6`.
     5. The CPU triggers a GPU line draw by writing something into `0xF0FF`.
 
 ### CPU (K1)
 
 The CPU is a barely-working RISC variant with A and X registers. It is a tiny bit similar to the MOS 6502 CPU. It can
 
-* load data into A or X either from an immediate value or from address space
-* subtract or add X from A (the result left in A)
-* zero flags for when subtraction results in a 0 A value
+* load data into A or X either from an immediate value or from address space (absolute or relative from register X)
+* subtract or add X or an immediate value from A (the result is left in A)
+* zero flags for when subtraction or loading results in a 0 A value
 * conditional jump (if zero flag is set) and jumps
 
 ### RAM
@@ -64,9 +64,9 @@ Well, currently, this is extremely incomplete, too incomplete to
 the point that I do not know what will happen yet. However, these are
 things that I plan to do soon:
 
-* Virtualizing a hard drive
+* DONE! ~~Virtualizing a hard drive~~
 * Implementing the BIOS
-* Writing a bootloader
+* DONE! ~~Writing a bootloader~~
 * Deciding on the CPU opcode list
 * Finishing the CPU emulator
 * DONE! ~~Writing a graphics device that can draw pixels and lines at least~~
