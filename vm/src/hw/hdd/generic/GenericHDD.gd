@@ -35,4 +35,6 @@ func get_at(index: int):
 		return _high
 	elif index == 0x202:
 		return _low
+	else:
+		return 0
 
