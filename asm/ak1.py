@@ -1,6 +1,7 @@
 # ak1 - Assembles K1 assembly code
 
 import sys
+import re
 
 class Assembler:
     def _getBytesForInstruction(self, line):
@@ -24,6 +25,8 @@ class Assembler:
         
     def _isImmediate(self, arg):
         return arg[0] == '#'
+    def _isRelative(self, arg):
+        return '+x' in arg
 
     def _getLabels(self, lines):
         pc = 0
@@ -47,15 +50,16 @@ class Assembler:
         if p[0] == '#':
             p = p[1:]
 
+        rel_idx = p.find('+')
+        if rel_idx >= 0:
+            p = p[0:rel_idx]
+
         if p[0] == '$':
             val = int(p[1:], 16)
         else:
             val = int(p)
         
-        if sixteen:
-            return [val & 0xFF, (val & 0xFF00) >> 8]
-        else:
-            return [val & 0xFF]
+        return self._toHex(val, sixteen)
     
     def _toHex(self, p, sixteen):
         if sixteen:
@@ -77,6 +81,9 @@ class Assembler:
                     if self._isImmediate(p[2]):
                         binary.append(0xA4)
                         binary.extend(self._decodeParam(p[2], False))
+                    elif self._isRelative(p[2]):
+                        binary.append(0xA6)
+                        binary.extend(self._decodeParam(p[2], True))
                     else:
                         binary.append(0xA0)
                         binary.extend(self._decodeParam(p[2], True))
@@ -92,7 +99,10 @@ class Assembler:
                     print('Immediate not supported on ST: ' + l)
                     exit()
                 if p[1] == 'a':
-                    binary.append(0xA1)
+                    if self._isRelative(p[2]):
+                        binary.append(0xA7)
+                    else:
+                        binary.append(0xA1)
                 elif p[1] == 'x':
                     binary.append(0xA3)
                 binary.extend(self._decodeParam(p[2], True))
@@ -115,25 +125,23 @@ class Assembler:
                 elif p[2] == 'x':
                     binary.append(0xB3)
             elif p[0] == 'jp':
-                if self._isImmediate(p[1]):
+                if p[1] in labels:
                     binary.append(0x90)
-                    binary.append(self._decodeParam(p[1], True))
+                    binary.extend(self._toHex(labels[p[1]], True))
+                elif re.match('(\$[0-9a-f]+)|([0-9])', p[1]):
+                    binary.append(0x90)
+                    binary.extend(self._decodeParam(p[1], True))
                 else:
-                    if p[1] in labels:
-                        binary.append(0x90)
-                        binary.extend(self._toHex(labels[p[1]], True))
-                    else:
-                        print('Label not defined: ' + p[1])
+                    print('Label not defined: ' + p[1])
             elif p[0] == 'jz':
-                if self._isImmediate(p[1]):
+                if p[1] in labels:
                     binary.append(0x91)
-                    binary.append(self._decodeParam(p[1], True))
+                    binary.extend(self._toHex(labels[p[1]], True))
+                elif re.match('(\$[0-9a-f]+)|([0-9])', p[1]):
+                    binary.append(0x91)
+                    binary.extend(self._decodeParam(p[1], True))
                 else:
-                    if p[1] in labels:
-                        binary.append(0x91)
-                        binary.extend(self._toHex(labels[p[1]], True))
-                    else:
-                        print('Label not defined: ' + p[1])
+                    print('Label not defined: ' + p[1])
             else:
                 print('Unknown instruction:' + l)
 
@@ -151,6 +159,7 @@ class Assembler:
 
         labels = self._getLabels(lines)
         print('Pass 1: saw ' + str(len(labels)) + ' labels')
+        print(labels)
 
         binary = self._compile(lines, labels)
         print('Pass 2: compiled ' + str(len(binary)) + ' bytes of code')
