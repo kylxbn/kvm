@@ -15,6 +15,9 @@ const OP_STORE_X_ABS = 0xA3
 const OP_LOAD_A_IMM = 0xA4
 const OP_LOAD_X_IMM = 0xA5
 
+const OP_LOAD_A_REL = 0xA6
+const OP_STORE_A_REL = 0xA7
+
 const OP_ADD_IMM = 0xB0
 const OP_SUB_IMM = 0xB1
 const OP_ADD_X   = 0xB2
@@ -45,10 +48,18 @@ func step():
 	elif opcode == OP_STORE_X_ABS:
 		_mmc.set_at(param, _x)
 	elif opcode == OP_LOAD_A_IMM:
-		_a = param
+		_a = param & 0xFF
 		_zf = _a == 0
+		_pc -= 1
 	elif opcode == OP_LOAD_X_IMM:
-		_x = param
+		_x = param & 0xFF
+		_pc -= 1
+		
+	elif opcode == OP_LOAD_A_REL:
+		_a = _mmc.get_at(param + _x)
+		_zf = _a == 0
+	elif opcode == OP_STORE_A_REL:
+		_mmc.set_at(param + _x, _a)
 		
 	elif opcode == OP_SUB_IMM:
 		var res = _a - param
@@ -57,11 +68,11 @@ func step():
 	elif opcode == OP_ADD_IMM:
 		var res = _a + param
 		_a = res if res < 256 else res - 256
+		_zf = _a == 0
 	elif opcode == OP_SUB_X:
 		_pc -= 2
 		var res = _a - _x
 		_a = res if res >= 0 else res + 256
-		_zf = _a == 0
 	elif opcode == OP_ADD_X:
 		_pc -= 2
 		var res = _a + _x
