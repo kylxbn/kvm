@@ -1,3 +1,8 @@
+; KVM bootloader
+; this just loads the first sector
+; of the hard disk into RAM while showing
+; a progress bar
+
 #offset $0000 ; this is the bootloader so we start at $0000
 
     LD A #$00     ; we read sector 0

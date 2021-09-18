@@ -1,3 +1,7 @@
+; DRAWLINES
+; this makes the GPU draw random colored
+; lines at the screen
+
 #offset $0300
 
 START:
